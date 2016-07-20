@@ -7,7 +7,7 @@ class RSVP(models.Model):
                                  max_length=100)
     adults_number = models.PositiveIntegerField(verbose_name="dorośli",
                                                 default=1)
-    children_number = models.PositiveIntegerField(verbose_name="dzieci",
+    childrens_number = models.PositiveIntegerField(verbose_name="dzieci",
                                                 default=0)
     transport = models.BooleanField(verbose_name="transport",
                                     default=False)

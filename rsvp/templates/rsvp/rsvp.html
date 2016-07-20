@@ -1,7 +1,11 @@
 {% block rsvp %}
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Wyślij" />
-    </form>
+    {% if not success %}
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Wyślij" />
+        </form>
+    {% else %}
+        Dziękujemy za potwierdzenie swojej obecności. Do zobaczenia!
+    {% endif %}
 {% endblock %}
