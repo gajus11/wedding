@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 PROJECT_APPS = [
     'wedding_app',
     'rsvp',
+    'gifts',
 ]
 
 INSTALLED_APPS += PROJECT_APPS
