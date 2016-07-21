@@ -1,8 +1,13 @@
 from django.shortcuts import render
 
+from django.conf import settings
+from django.templatetags.static import static
+
 from rsvp.forms import RSVPform
 
 def home(request):
+    print(settings.STATIC_ROOT)
+    print(static('vendor/bootstrap/css/bootstrap.min.css'))
     #If form is submited
     success = False
 
