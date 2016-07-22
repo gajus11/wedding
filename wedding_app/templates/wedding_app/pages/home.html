@@ -1,4 +1,5 @@
 {% extends 'wedding_app/base.html' %}
+{% load staticfiles %}
 
 {% block content %}
     {% block slider %}
@@ -11,7 +12,67 @@
     {% endblock %}
 
     {% block when %}
-
+        <section class="bg-primary">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 text-center">
+                        <h2>Kiedy?</h2>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h2>{{ wedding.when.day }}/{{ wedding.when.month }}</h2>
+                                <hr class="hr-divider">
+                                <p>{{ wedding_day }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <img class="icon" src="{% static 'img/icon-church.png' %}">
+                                <p>{{ wedding.when.hour }}:{{ wedding.when.minute }}</p>
+                                <hr class="hr-divider">
+                                <p>Ślub</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <img class="icon" src="{% static 'img/icon-party.png' %}">
+                                <p>{{ party.when.hour }}:{{ party.when.minute }}</p>
+                                <hr class="hr-divider">
+                                <p>Wesele</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="/party" class="btn btn-default-btn-xl sr-button">Zobacz szczegóły</a>
+                    </div>
+                </div>
+            </div>
+        </section>
     {% endblock %}
+
+    {% block countdown %}
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12" id="clockdiv">
+                        Dni: <span class="days"></span><br>
+                        Godziny: <span class="hours"></span><br>
+                        Minuty: <span class="minutes"></span><br>
+                        Sekundy: <span class="seconds"></span><br>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock %}
+
     {% include 'rsvp/rsvp.html' %}
+
+    {% if wedding_time_json %}
+        <script src="{% static 'js/countdown.js' %}"></script>
+        <script>
+            var wedding_time_ = {{ wedding_time_json|safe }};
+            initializeClock('clockdiv', wedding_time_.wedding_time)
+        </script>
+    {% endif %}
 {% endblock %}

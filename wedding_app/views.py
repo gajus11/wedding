@@ -1,27 +1,53 @@
+import datetime
+from json import dumps as json_dumps
+
 from django.shortcuts import render
 
-from django.conf import settings
-from django.templatetags.static import static
-
 from rsvp.forms import RSVPform
+from .models import Wedding, Party
+
+def date_handler(obj):
+    if hasattr(obj, 'isoformat'):
+        return obj.isoformat()
+    else:
+        raise TypeError
 
 def home(request):
-    print(settings.STATIC_ROOT)
-    print(static('vendor/bootstrap/css/bootstrap.min.css'))
-    #If form is submited
-    success = False
+    #Get information about wedding and party
+    wedding = Wedding.objects.all()
+    wedding_day = ''
+    wedding_time_json = json_dumps({'wedding_time': datetime.datetime.now()}, default=date_handler)
+
+    if len(wedding) == 0:
+        wedding = None
+    else:
+        wedding = wedding[0]
+        wedding_day = wedding.when.strftime('%A')
+        wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
+    party = Party.objects.all()
+    if len(party) == 0:
+        party = None
+    else:
+        party = party[0]
+
+    #If RSVP form is submited
+    rsvp_success = False
 
     if request.method == 'POST':
-        form = RSVPform(request.POST)
-        if form.is_valid():
-            form.save()
-            success = True
+        rsvp_form = RSVPform(request.POST)
+        if rsvp_form.is_valid():
+            rsvp_form.save()
+            rsvp_success = True
 
-    form = RSVPform()
+    rsvp_form = RSVPform()
 
     context = {
-        'form': form,
-        'success': success,
+        'wedding': wedding,
+        'party': party,
+        'wedding_day': wedding_day,
+        'wedding_time_json': wedding_time_json,
+        'rsvp_form': rsvp_form,
+        'rsvp_success': rsvp_success,
     }
 
     return render(request,

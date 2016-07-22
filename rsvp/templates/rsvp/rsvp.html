@@ -2,7 +2,7 @@
     {% if not success %}
         <form action="" method="post">
             {% csrf_token %}
-            {{ form }}
+            {{ rsvp_form }}
             <input type="submit" value="Wyślij" />
         </form>
     {% else %}
