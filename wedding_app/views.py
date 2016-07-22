@@ -4,7 +4,7 @@ from json import dumps as json_dumps
 from django.shortcuts import render
 
 from rsvp.forms import RSVPform
-from .models import Wedding, Party
+from .models import Wedding, Party, Couple
 
 def date_handler(obj):
     if hasattr(obj, 'isoformat'):
@@ -24,11 +24,18 @@ def home(request):
         wedding = wedding[0]
         wedding_day = wedding.when.strftime('%A')
         wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
+
     party = Party.objects.all()
     if len(party) == 0:
         party = None
     else:
         party = party[0]
+
+    couple = Couple.objects.all()
+    if len(couple) == 0:
+        couple = None
+    else:
+        couple = couple[0]
 
     #If RSVP form is submited
     rsvp_success = False
@@ -44,6 +51,7 @@ def home(request):
     context = {
         'wedding': wedding,
         'party': party,
+        'couple': couple,
         'wedding_day': wedding_day,
         'wedding_time_json': wedding_time_json,
         'rsvp_form': rsvp_form,

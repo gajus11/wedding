@@ -1,47 +1,85 @@
-/* Move brand to center */
-.navbar-brand {
-    position: absolute;
-    width: 80%;
-    left: 0;
-    text-align: center;
-    margin: 0 auto;
-    z-index: -1;
-}
-
 /* Move menu to center */
-.navbar .navbar-nav {
-    display: inline-block;
-    float: none;
-}
-
 .navbar .navbar-collapse {
     text-align: center;
 }
 
-/* Change manu icon color */
+/* Menu */
+.navbar-toggle svg {
+    width: 50px !important;
+    height: 50px !important;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* Change menu icon and under icon text color */
 .navbar-default svg path {
     fill: #F05F40 !important;
 }
 
-/* Hide navbar brand on big devices */
+.navbar-default .navbar-toggle {
+    color: #F05F40  !important;
+}
+
+/* Navbar position */
+.navbar-header {
+    float: none !important;
+    align: center !important;
+}
+
+.navbar-toggle {
+    border: 0px !important;
+    margin: auto !important;
+    width: 100% !important;
+}
+
+/* Menu text position and size */
+.navbar-toggle span {
+    padding-bottom: 30px;
+    vertical-align: middle;
+}
+
+.navbar-default .navbar-toggle:focus,
+.navbar-default .navbar-toggle:hover {
+    background-color: transparent !important;
+}
+
+.navbar-nav {
+    margin: auto !important;
+    width: 100% !important;
+    align: center !important;
+}
+
+.navbar-nav li {
+    text-align: center;
+    float: none !important;
+}
+
 @media (min-width: 768px) {
-    .navbar-brand {
-        display: none;
+    .navbar-toggle {
+        display: inline-block !important;
     }
 
-    /* Change manu icon color */
+    /* Change menu icon and under icon text color */
     .navbar-default svg path {
         fill: rgba(255, 255, 255, 0.7) !important;
     }
 
-    .navbar-default.affix svg path {
-        fill: #222222 !important;
+    .navbar-default .navbar-toggle {
+        color: rgba(255, 255, 255, 0.7) !important;
     }
-}
 
-/* Hide menu image on small devices */
-@media (max-width: 768px) {
-    .navbar-nav > .navbar-image {
-        display: none;
+    .navbar-default.affix svg path {
+        fill: #F05F40 !important;
+    }
+
+    .navbar-default.affix .navbar-toggle {
+        color: #F05F40 !important;
+    }
+
+    /* Menu text position and size */
+    .navbar-toggle span {
+        padding-bottom: 35px;
+        vertical-align: middle;
+        font-size: 25px;
     }
 }

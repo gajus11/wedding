@@ -11,7 +11,7 @@
         <meta name="description" content="wedding">
         <meta name="author" content="www.gajownik.com">
 
-        <title>Monika i Łukasz</title>
+        <title>{{ couple.bride_name }} & {{ couple.groom_name }}</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -44,19 +44,18 @@
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                            <span>{{ couple.bride_name }}</span>
+                            <img class="svg" src="{% static 'img/menu_image.svg' %}" width="50px" height="50px">
+                            <span>{{ couple.groom_name }}</span>
                         </button>
-                        <a class="navbar-brand page-scroll" href="{% url 'wedding:home' %}">Monika & Łukasz</a>
+                        <!--<a class="navbar-brand page-scroll" href="{% url 'wedding:home' %}">{{ couple.bride_name }} & {{ couple.groom_name }}</a>-->
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <div class="collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li>
-                                <a href="{% url 'wedding:home' %}">Home</a>
-                            </li>
-                            <li class="navbar-image">
-                                <a class="navbar-image" href="{% url 'wedding:home' %}"><img class="svg" src="{% static 'img/menu_image.svg' %}"></a>
+                                <a href="{% url 'wedding:home' %}">Wedding</a>
                             </li>
                             <li>
                                 <a href="{% url 'wedding:home' %}">Party</a>
