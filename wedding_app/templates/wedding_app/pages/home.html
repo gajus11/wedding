@@ -12,31 +12,31 @@
     {% endblock %}
 
     {% block when %}
-        <section class="bg-primary">
+        <section class="bg-secondary">
             <div class="container">
-                <div class="row">
-                    <div class="col-sm-6 text-center">
-                        <div class="left-side"
-                            <h2 class="h2-header">Kiedy?</h2>
+                <div class="row flex">
+                    <div class="col-sm-6 text-center flex flex-stretch padding-bottom lb-border">
+                        <div class="flex-centered">
+                            <h2>Kiedy?</h2>
                         </div>
                     </div>
-                    <div class="col-sm-6 text-center">
+                    <div class="col-sm-6 text-center flex-stretch padding-top">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 padding-top-bottom">
                                 <h2>{{ wedding.when.day }}/{{ wedding.when.month }}</h2>
                                 <hr class="hr-divider">
                                 <p>{{ wedding_day }}</p>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-6">
-                                <img class="icon" src="{% static 'img/icon-church.png' %}">
+                            <div class="col-sm-6 padding-top-bottom">
+                                <img class="icon" src="{% static 'img/icon-church.svg' %}">
                                 <p>{{ wedding.when.hour }}:{{ wedding.when.minute }}</p>
                                 <hr class="hr-divider">
                                 <p>Ślub</p>
                             </div>
-                            <div class="col-sm-6">
-                                <img class="icon" src="{% static 'img/icon-party.png' %}">
+                            <div class="col-sm-6 padding-top-bottom">
+                                <img class="icon" src="{% static 'img/icon-party.svg' %}">
                                 <p>{{ party.when.hour }}:{{ party.when.minute }}</p>
                                 <hr class="hr-divider">
                                 <p>Wesele</p>
@@ -45,8 +45,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12">
-                        <a href="/party" class="btn btn-default-btn-xl sr-button">Zobacz szczegóły</a>
+                    <div class="col-sm-12 button-padding flex">
+                        <a href="/party" class="btn btn-default-btn-xl flex-centered button">Zobacz szczegóły</a>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,8 @@
     {% endblock %}
 
     {% block countdown %}
-        <section>
+        <section class="bg-primary
+        ">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12" id="clockdiv">
