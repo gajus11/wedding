@@ -7,7 +7,7 @@
 }
 
 /* Change menu icon and under icon text color */
-.navbar-default svg path {  /* Menu icon color */
+.navbar-toggle svg path {  /* Menu icon color */
     fill: #F05F40 !important;
 }
 
@@ -48,6 +48,8 @@
     display: -webkit-flex;
 
     display: flex;
+
+    text-align: center;
 }
 
 .flex-list li{
@@ -58,6 +60,11 @@
 /* When section */
 .flex {
     display: flex;
+}
+
+.flex-vertical {
+    display: flex;
+    flex-direction: column;
 }
 
 .flex-stretch {

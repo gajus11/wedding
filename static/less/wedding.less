@@ -1,0 +1,74 @@
+.bg-primary {
+    background-color: @gray-lighter;
+    color: @color-primary;
+}
+
+.bg-secondary {
+    background-color: @color-primary;
+    color: @gray-lighter;
+}
+
+// Navigation
+
+.navbar-default {
+
+    .navbar-toggle {                    // Menu look
+        color: @color-primary  !important;
+        border: 0px !important;
+        margin: auto !important;
+        width: 100% !important;
+
+        svg {                           // Icon
+            width: 50px !important;
+            height: 50px !important;
+            margin-left: 10px;
+            margin-right: 10px;
+
+            path {                      // Icon color
+                fill: @color-primary !important;
+            }
+        }
+
+        &.focus,
+        &.hover {                       // Transparent background on hover
+            background-color: transparent !important;
+        }
+    }
+
+    .navbar-header {                    // Menu position
+        float: none !important;
+        align: center !important;
+    }
+
+    span {                              // Bride and grom names position
+        padding-bottom: 30px;
+        vertical-align: middle;
+    }
+
+    @media (min-width: 768px) {         // Small devices
+
+        .navbar-toggle {                // Menu look
+            display: inline-block !important;
+            color: @gray-lighter !important;
+
+            svg path{                       // Icon
+                fill: @gray-lighter !important;
+            }
+        }
+
+        span {                          // Bride and grom names position
+            padding-bottom: 35px;
+            vertical-align: middle;
+            font-size: 25px;
+        }
+
+        &.affix .navbar-toggle {        // Menu color
+            color: @color-primary !important;
+
+            svg path {
+                fill: @color-primary !important;
+            }
+        }
+    }
+}
+
