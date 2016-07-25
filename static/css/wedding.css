@@ -43,15 +43,22 @@
     background-color: transparent !important;
 }
 
-.navbar-nav {
-    margin: auto !important;
-    width: 100% !important;
-    align: center !important;
+.flex-list {
+    width: 100%;
+    height: 90%;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
+
+    display: flex;
 }
 
-.navbar-nav li {
+.flex-list li{
     text-align: center;
-    float: none !important;
+    flex-grow: 1;
 }
 
 @media (min-width: 768px) {
