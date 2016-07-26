@@ -63,3 +63,6 @@ fabric.properties
 
 #Database
 *.sqlite3
+
+#Assets
+/assets/

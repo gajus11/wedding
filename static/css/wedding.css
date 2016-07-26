@@ -60,6 +60,7 @@
 /* When section */
 .flex {
     display: flex;
+    align-items: stretch;
 }
 
 .flex-vertical {

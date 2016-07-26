@@ -2,6 +2,7 @@
 <html lang="pl">
 
 {% load staticfiles %}
+{% load compress %}
 
     {% block head %}
     <head>
@@ -26,8 +27,14 @@
         <link href="{% static 'vendor/magnific-popup/magnific-popup.css' %}" rel="stylesheet">
 
         <!-- Theme CSS -->
-        <link href="{% static 'css/creative.min.css' %}" rel="stylesheet">
-        <link href="{% static 'css/wedding.css' %}" rel="stylesheet">
+        <!--<link href="{% static 'css/creative.min.css' %}" rel="stylesheet">-->
+        <!--<link href="{% static 'css/wedding.css' %}" rel="stylesheet">-->
+
+        <!-- Theme LESS -->
+        {% compress css %}
+            <link rel="stylesheet" type="text/less" href="{% static 'less/creative.less' %}">
+            <link rel="stylesheet" type="text/less" href="{% static 'less/wedding.less' %}">
+        {% endcompress %}
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

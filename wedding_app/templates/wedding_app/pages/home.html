@@ -12,30 +12,30 @@
     {% endblock %}
 
     {% block when %}
-        <section class="bg-secondary">
+        <section class="bg-primary two-sides">
             <div class="container">
                 <div class="row flex">
-                    <div class="col-sm-6 text-center flex flex-stretch padding-bottom lb-border">
+                    <div class="col-sm-6 text-center flex padding-header lb-border">
                         <div class="flex-centered">
                             <h2>Kiedy?</h2>
                         </div>
                     </div>
-                    <div class="col-sm-6 text-center flex-stretch padding-top">
+                    <div class="col-sm-6 text-center padding-top">
                         <div class="row">
-                            <div class="col-sm-12 padding-top-bottom">
+                            <div class="col-sm-12 padding-cell">
                                 <h2>{{ wedding.when.day }}/{{ wedding.when.month }}</h2>
                                 <hr class="hr-divider">
                                 <p>{{ wedding_day }}</p>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-6 padding-top-bottom">
+                            <div class="col-sm-6 padding-cell">
                                 <img class="icon" src="{% static 'img/icon-church.svg' %}">
                                 <p>{{ wedding.when.hour }}:{{ wedding.when.minute }}</p>
                                 <hr class="hr-divider">
                                 <p>Ślub</p>
                             </div>
-                            <div class="col-sm-6 padding-top-bottom">
+                            <div class="col-sm-6 padding-cell">
                                 <img class="icon" src="{% static 'img/icon-party.svg' %}">
                                 <p>{{ party.when.hour }}:{{ party.when.minute }}</p>
                                 <hr class="hr-divider">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 button-padding flex">
+                    <div class="col-sm-12 flex padding-button">
                         <a href="/party" class="btn btn-default-btn-xl flex-centered button">Zobacz szczegóły</a>
                     </div>
                 </div>
@@ -54,24 +54,23 @@
     {% endblock %}
 
     {% block countdown %}
-        <section class="bg-primary
-        ">
+        <section class="bg-secondary">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12 flex" id="clockdiv">
-                        <div class="flex-stretch flex-list flex-vertical">
+                        <div class="flex-list flex-vertical">
                             <span class="days"></span>
                             <span>Dni</span>
                         </div>
-                        <div class="flex-stretch flex-list flex-vertical">
+                        <div class="flex-list flex-vertical">
                             <span class="hours"></span><br>
                             <span>Godziny</span>
                         </div>
-                        <div class="flex-stretch flex-list flex-vertical">
+                        <div class="flex-list flex-vertical">
                             <span class="minutes"></span>
                             <span>Minuty</span>
                         </div>
-                        <div class="flex-stretch flex-list flex-vertical">
+                        <div class="flex-list flex-vertical">
                             <span class="seconds"></span>
                             <span>Sekundy</span>
                         </div>

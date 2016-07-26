@@ -1,16 +1,26 @@
+@import "variables.less";
+@import "mixins.less";
+@import "wedding-variables.less";
+@import "wedding-mixins.less";
+@import "flex.less";
+
+/* Sections colors */
 .bg-primary {
-    background-color: @gray-lighter;
+    background-color: white;
     color: @color-primary;
+    border-color: @color-primary;
 }
 
 .bg-secondary {
     background-color: @color-primary;
-    color: @gray-lighter;
+    color: white;
+    border-color: white;
 }
 
 // Navigation
 
 .navbar-default {
+    background-color: @color-navbar;
 
     .navbar-toggle {                    // Menu look
         color: @color-primary  !important;
@@ -29,8 +39,8 @@
             }
         }
 
-        &.focus,
-        &.hover {                       // Transparent background on hover
+        &:focus,
+        &:hover {                       // Transparent background on hover
             background-color: transparent !important;
         }
     }
@@ -45,7 +55,8 @@
         vertical-align: middle;
     }
 
-    @media (min-width: 768px) {         // Small devices
+    @media (min-width: 768px) {         // Big devices
+        background-color: transparent;
 
         .navbar-toggle {                // Menu look
             display: inline-block !important;
@@ -62,13 +73,115 @@
             font-size: 25px;
         }
 
-        &.affix .navbar-toggle {        // Menu color
-            color: @color-primary !important;
+        &.affix {
+            background-color: @color-navbar;
 
-            svg path {
-                fill: @color-primary !important;
+            .navbar-toggle {        // Menu color
+                color: @color-primary !important;
+
+                svg path {
+                    fill: @color-primary !important;
+                }
             }
         }
     }
 }
 
+/* Two sides section */
+.two-sides {
+
+    /* Left-bottom border */
+    .lb-border {
+        border: 0px;
+        border-right: 1px;
+        border-style: solid;
+
+        @media (max-width: 768px) {         // Big devices
+            border: 0px;
+            border-bottom: 1px;
+            border-style: solid;
+
+            width: 80%;
+            margin: auto;
+        }
+    }
+
+    /* Icon */
+    .icon {
+        padding-bottom: 20px;
+        width: 75px;
+        height: 75px;
+    }
+
+    /* Divider */
+    .hr-divider {
+        width: 20%;
+        max-width: 100px;
+    }
+
+    /* Paddings */
+    .padding-header {
+        @media (max-width: 768px) {         // Small devices
+            padding-bottom: 100px;
+        }
+    }
+
+    .padding-button {
+        padding-top: 50px;
+
+        @media (min-width: 768px) {         // Big devices
+            padding-top: 100px;
+        }
+    }
+
+    .padding-cell {
+        padding: 20px 0px;
+    }
+}
+
+/* Flex list */
+.flex-list {
+    width: 100%;
+    height: 90%;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+
+    .flex-display(flex);
+    .flex-direction(column);
+
+    li{
+        .flex-grow(1);
+    }
+
+    @media (min-width: 768px) {         // Big devices
+        .flex-direction(row);
+    }
+}
+
+/* Flex */
+.flex {
+    .flex-display(flex);
+    .flex-direction(column);
+    align-items: stretch;
+
+    .flex-vertical {
+        .flex-direction(column);
+    }
+
+    .flex-centered {
+        margin: auto;
+    }
+
+    @media (min-width: 768px) {         // Big devices
+        .flex-direction(row);
+    }
+}
+
+/* Buttons */
+.button {
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 0;
+}
