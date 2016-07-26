@@ -54,25 +54,72 @@
     {% endblock %}
 
     {% block countdown %}
-        <section class="bg-secondary">
+        <section class="bg-secondary countdown-section">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-12 flex" id="clockdiv">
-                        <div class="flex-list flex-vertical">
-                            <span class="days"></span>
-                            <span>Dni</span>
-                        </div>
-                        <div class="flex-list flex-vertical">
-                            <span class="hours"></span><br>
-                            <span>Godziny</span>
-                        </div>
-                        <div class="flex-list flex-vertical">
-                            <span class="minutes"></span>
-                            <span>Minuty</span>
-                        </div>
-                        <div class="flex-list flex-vertical">
-                            <span class="seconds"></span>
-                            <span>Sekundy</span>
+                    <div class="sm-col-6">
+                        <h1 class="text-center countdown-header">Pozostało</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="sm-col-6">
+                        <div id="countdown-id" class="countdown flex-horizontal">
+                            <div class="countdown-cell flex-vertical">
+                                <span class="countDays">
+                                    <span class="position {% if wedding.when.date.day < 100 %} hide {% endif %}">
+                                        <span class="digit static"></span>
+                                    </span>
+                                    <span class="position">
+                                        <span class="digit static"></span>
+                                    </span>
+                                    <span class="position">
+                                        <span class="digit static"></span>
+                                    </span>
+                                </span>
+                                <span class="countdown-desc">Dni</span>
+                            </div>
+
+                            <span class="countDiv countDiv0"></span>
+
+                            <div class="countdown-cell flex-vertical">
+                                <span class="countHours">
+                                    <span class="position">
+                                        <span class="digit static"></span>
+                                    </span>
+                                    <span class="position">
+                                        <span class="digit static"></span>
+                                    </span>
+                                </span>
+                                <span class="countdown-desc">Godzin</span>
+                            </div>
+
+                            <span class="countDiv countDiv1"></span>
+
+                            <div class="countdown-cell flex-vertical">
+                                <span class="countMinutes">
+                                    <span class="position">
+                                        <span class="digit static"></span>
+                                    </span>
+                                    <span class="position">
+                                        <span class="digit static"></span>
+                                    </span>
+                                </span>
+                                <span class="countdown-desc">Minut</span>
+                            </div>
+
+                            <span class="countDiv countDiv2"></span>
+
+                            <div class="countdown-cell flex-vertical">
+                                <span class="countSeconds">
+                                    <span class="position">
+                                        <span class="digit static"></span>
+                                    </span>
+                                    <span class="position">
+                                        <span class="digit static"></span>
+                                    </span>
+                                </span>
+                                <span class="countdown-desc">Sekund</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,10 +130,15 @@
     {% include 'rsvp/rsvp.html' %}
 
     {% if wedding_time_json %}
-        <script src="{% static 'js/countdown.js' %}"></script>
+        <!-- jQuery -->
+        <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+        <!-- Countdown scripts -->
+        <script src="{% static 'vendor/countdown/js/jquery.countdown.js' %}"></script>
+        <script src="{% static 'vendor/countdown/js/countdown.js' %}"></script>
         <script>
             var wedding_time_ = {{ wedding_time_json|safe }};
-            initializeClock('clockdiv', wedding_time_.wedding_time)
+            initializeClock('countdown-id', wedding_time_.wedding_time)
         </script>
     {% endif %}
 {% endblock %}
