@@ -9,8 +9,8 @@
                 <h3>Będziesz z nami?</h3>
             </div>
             <div class="panel-body">
-                {% if not success %}
-                <form class="form-horizontal" role="form" action="" method="post">
+                {% if not rsvp_success %}
+                <form class="form-horizontal" role="form" action="{% url 'rsvp:accept' %}" method="post">
                     {% csrf_token %}
                     <div class="form-group">
                         <label class="control-label col-md-2 col-md-offset-2" for="{{ rsvp_form.name.id_for_label }}">
@@ -18,14 +18,12 @@
                         </label>
                         <div class="col-md-8">
                             <div class="col-md-4">
-                                <div class="form-group internal">
-                                    {{ rsvp_form.name.errors }}
+                                <div class="form-group internal {% if rsvp_form.name.errors %} form-error {% endif %}">
                                     {{ rsvp_form.name }}
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group internal">
-                                    {{ rsvp_form.last_name.errors }}
+                                <div class="form-group internal {% if rsvp_form.last_name.errors %} form-error {% endif %}">
                                     {{ rsvp_form.last_name }}
                                 </div>
                             </div>
@@ -37,14 +35,12 @@
                         </label>
                         <div class="col-md-8">
                             <div class="col-md-4">
-                                <div class="form-group internal">
-                                    {{ rsvp_form.adults_number.errors }}
+                                <div class="form-group internal {% if rsvp_form.adults_number.errors %} form-error {% endif %}">
                                     {{ rsvp_form.adults_number }}
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group internal">
-                                    {{ rsvp_form.childrens_number.errors }}
+                                <div class="form-group internal {% if rsvp_form.childrens_number.errors %} form-error {% endif %}">
                                     {{ rsvp_form.childrens_number }}
                                 </div>
                             </div>
@@ -74,8 +70,8 @@
                     </div>
                 </form>
                 {% else %}
-                    <div class="panel-body">
-                        <h2>Dziękujemy za potwierdzenie swojej obecności. Do zobaczenia!</h2>
+                    <div class="panel-body text-center">
+                        <h4>Dziękujemy za potwierdzenie swojej obecności. Do zobaczenia!</h4>
                     </div>
                 {% endif %}
             </div>

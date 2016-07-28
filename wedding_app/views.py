@@ -1,7 +1,8 @@
 import datetime
 from json import dumps as json_dumps
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 
 from rsvp.forms import RSVPform
 from .models import Wedding, Party, Couple
@@ -13,7 +14,7 @@ def date_handler(obj):
         raise TypeError
 
 def home(request):
-    #Get information about wedding and party
+    #Get information about wedding
     wedding = Wedding.objects.all()
     wedding_day = ''
     wedding_time_json = json_dumps({'wedding_time': datetime.datetime.now()}, default=date_handler)
@@ -25,32 +26,33 @@ def home(request):
         wedding_day = wedding.when.strftime('%A')
         wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
 
+    #Get information about wedding
     party = Party.objects.all()
     if len(party) == 0:
         party = None
     else:
         party = party[0]
 
+    #Get information about couple
     couple = Couple.objects.all()
     if len(couple) == 0:
         couple = None
     else:
         couple = couple[0]
 
-    #If RSVP form is submited
-    rsvp_success = False
+    #Get RSVP informations
+    rsvp_fields = request.session.get('rsvp_fields')
+    rsvp_errors = request.session.get('rsvp_errors')
+    rsvp_success = request.session.get('rsvp_success', False)
 
-    if request.method == 'POST':
-        rsvp_form = RSVPform(request.POST)
-        if rsvp_form.is_valid():
-            rsvp_form.save()
-            rsvp_success = True
-
-    # rsvp_form = RSVPform(initial={
-    #     'name': 'Imię',
-    #     'last_name': 'Nazwisko'
-    # })
-    rsvp_form = RSVPform()
+    #Add errors to RSVP form
+    rsvp_form = RSVPform(rsvp_fields)
+    if rsvp_errors:
+        fields = rsvp_errors.keys()
+        for field in fields:
+            errors = rsvp_errors.get(field)
+            for error in errors:
+                rsvp_form.add_error(field, error)
 
     context = {
         'wedding': wedding,
