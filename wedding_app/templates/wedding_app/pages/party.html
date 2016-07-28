@@ -1,0 +1,47 @@
+{% extends 'wedding_app/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    {% block slider %}
+        <header>
+            <div class="header-content">
+                <div class="header-content-inner">
+                </div>
+            </div>
+        </header>
+    {% endblock %}
+
+    {% block party_details %}
+        <section class="bg-primary party-details">
+            <div class="container">
+                <div class="row header">
+                    <div class="col-xs-12 text-center">
+                        <h1>Szczegóły</h1>
+                    </div>
+                </div>
+                <hr class="hr-divider">
+                <div class="row body">
+                    <div class="col-lg-5 col-lg-offset-1 flex-vertical">
+                        <img class="img-responsive center-block" src="{{ wedding.image.url }}">
+                        <h3>Ceremonia zaślubin</h3>
+                        {{ wedding.description }}
+                        <h4>{{ wedding_day }}, {{ wedding.when.day }}.{{ wedding.when.month }}.{{ wedding.when.year }}r., godz. {{ wedding.when.hour }}:{{ wedding.when.minute }}</h4>
+                    </div>
+                    <div class="col-lg-5 col-lg-offset-1 flex-vertical">
+                        <img class="img-responsive center-block" src="{{ party.image.url }}">
+                        <h3>Przyjęcie weselne</h3>
+                        {{ party.description }}
+                        <h4>{{ wedding_day }}, {{ party.when.day }}.{{ party.when.month }}.{{ party.when.year }}r., godz. {{ party.when.hour }}:{{ party.when.minute }}</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock %}
+
+    {% block party-map %}
+
+    {% endblock %}
+
+    <!-- jQuery -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+{% endblock %}

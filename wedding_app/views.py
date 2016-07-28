@@ -58,3 +58,40 @@ def home(request):
     return render(request,
                   'wedding_app/pages/home.html',
                   context)
+
+def party(request):
+    #Get information about wedding
+    wedding = Wedding.objects.all()
+    wedding_day = ''
+
+    if len(wedding) == 0:
+        wedding = None
+    else:
+        wedding = wedding[0]
+        wedding_day = wedding.when.strftime('%A')
+
+    #Get information about party
+    party = Party.objects.all()
+    if len(party) == 0:
+        party = None
+    else:
+        party = party[0]
+
+    #Get information about couple
+    couple = Couple.objects.all()
+    if len(couple) == 0:
+        couple = None
+    else:
+        couple = couple[0]
+
+    context = {
+        'wedding': wedding,
+        'party': party,
+        'couple': couple,
+        'wedding_day': wedding_day,
+    }
+
+    return render(request,
+                  'wedding_app/pages/party.html',
+                  context)
+
