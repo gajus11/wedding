@@ -46,6 +46,10 @@ def home(request):
             rsvp_form.save()
             rsvp_success = True
 
+    # rsvp_form = RSVPform(initial={
+    #     'name': 'Imię',
+    #     'last_name': 'Nazwisko'
+    # })
     rsvp_form = RSVPform()
 
     context = {

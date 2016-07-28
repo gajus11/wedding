@@ -5,10 +5,8 @@ class RSVP(models.Model):
                             max_length=100)
     last_name = models.CharField(verbose_name="nazwisko",
                                  max_length=100)
-    adults_number = models.PositiveIntegerField(verbose_name="dorośli",
-                                                default=1)
-    childrens_number = models.PositiveIntegerField(verbose_name="dzieci",
-                                                default=0)
+    adults_number = models.PositiveIntegerField(verbose_name="dorośli")
+    childrens_number = models.PositiveIntegerField(verbose_name="dzieci")
     transport = models.BooleanField(verbose_name="transport",
                                     default=False)
     accomodation = models.BooleanField(verbose_name="nocleg",

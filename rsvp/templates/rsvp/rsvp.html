@@ -1,11 +1,84 @@
 {% block rsvp %}
-    {% if not success %}
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ rsvp_form }}
-            <input type="submit" value="Wyślij" />
-        </form>
-    {% else %}
-        Dziękujemy za potwierdzenie swojej obecności. Do zobaczenia!
-    {% endif %}
+{% load staticfiles %}
+
+    <link href="{% static 'vendor/bootstrap-switch/bootstrap3/bootstrap-switch.css' %}" rel="stylesheet">
+
+    <div class="container">
+        <div class="panel panel-primary dialog-panel">
+            <div class="panel-heading text-center">
+                <h3>Będziesz z nami?</h3>
+            </div>
+            <div class="panel-body">
+                {% if not success %}
+                <form class="form-horizontal" role="form" action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-md-offset-2" for="{{ rsvp_form.name.id_for_label }}">
+                            Imię i nazwisko
+                        </label>
+                        <div class="col-md-8">
+                            <div class="col-md-4">
+                                <div class="form-group internal">
+                                    {{ rsvp_form.name.errors }}
+                                    {{ rsvp_form.name }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group internal">
+                                    {{ rsvp_form.last_name.errors }}
+                                    {{ rsvp_form.last_name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-md-offset-2" for="{{ rsvp_form.adults_number.id_for_label }}">
+                            Goście
+                        </label>
+                        <div class="col-md-8">
+                            <div class="col-md-4">
+                                <div class="form-group internal">
+                                    {{ rsvp_form.adults_number.errors }}
+                                    {{ rsvp_form.adults_number }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group internal">
+                                    {{ rsvp_form.childrens_number.errors }}
+                                    {{ rsvp_form.childrens_number }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 flex">
+                            <label class="flex-cell flex-center" for='{{ rsvp_form.transport.id_for_label }}'>
+                                Transport
+                            </label>
+                            <div class="flex-cell flex-center">
+                                {{ rsvp_form.transport.errors }}
+                                {{ rsvp_form.transport }}
+                            </div>
+                            <label class="flex-cell flex-center" for=" {{ rsvp_form.accomodation.id_for_label }}">
+                                Nocleg
+                            </label>
+                            <div class="flex-cell flex-center">
+                                {{ rsvp_form.accomodation.errors }}
+                                {{ rsvp_form.accomodation }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 flex">
+                        <input class="button flex-centered" type="submit" value="Potwierdź">
+                    </div>
+                </form>
+                {% else %}
+                    <div class="panel-body">
+                        <h2>Dziękujemy za potwierdzenie swojej obecności. Do zobaczenia!</h2>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

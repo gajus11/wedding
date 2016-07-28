@@ -190,14 +190,6 @@
             box-shadow:1px 1px 1px rgba(4, 4, 4, 0.35);
 
             .background-gradient(@color-primary-light, @color-primary-lighter);
-
-            background-image: -webkit-gradient(
-                linear,
-                left bottom,
-                left top,
-                color-stop(0.5, #1A1A1A),
-                color-stop(0.5, #222222)
-            );
         }
 
         /**
@@ -240,6 +232,14 @@
         }
 
         @media (max-width: 768px) {         //Small devices
+            font-size: 40px;
+
+            .countdown-desc {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 500px) {         //Small devices
             font-size: 30px;
 
             .countdown-desc {
@@ -252,6 +252,28 @@
 /* Section RSVP */
 .rsvp {
 
+    /* Panel colors */
+    .panel-primary {
+        border-color: @color-primary;
+
+        .panel-heading {
+            border-color: @color-primary;
+            background-color: @color-primary;
+        }
+    }
+
+    /* Bootstrap switch colors */
+    .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary,
+    .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-primary {
+        background: @color-primary;
+    }
+
+    /* Button style */
+    .button {
+        color: @color-primary;
+        border-color: @color-primary;
+        background-color: white;
+    }
 }
 
 /* Flex list */
@@ -300,6 +322,10 @@
 
 .flex-centered {
     margin: auto;
+}
+
+.flex-cell {
+    .flex-grow(1);
 }
 
 /* Buttons */

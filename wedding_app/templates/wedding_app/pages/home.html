@@ -57,12 +57,12 @@
         <section class="bg-secondary countdown-section">
             <div class="container">
                 <div class="row">
-                    <div class="sm-col-6">
+                    <div class="col-sm-8 col-sm-offset-2">
                         <h1 class="text-center countdown-header">Pozostało</h1>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="sm-col-6">
+                    <div class="col-sm-8 col-sm-offset-2">
                         <div id="countdown-id" class="countdown flex-horizontal">
                             <div class="countdown-cell flex-vertical">
                                 <span class="countDays">
@@ -107,19 +107,19 @@
                                 <span class="countdown-desc">Minut</span>
                             </div>
 
-                            <span class="countDiv countDiv2"></span>
+                            <!--<span class="countDiv countDiv2"></span>-->
 
-                            <div class="countdown-cell flex-vertical">
-                                <span class="countSeconds">
-                                    <span class="position">
-                                        <span class="digit static"></span>
-                                    </span>
-                                    <span class="position">
-                                        <span class="digit static"></span>
-                                    </span>
-                                </span>
-                                <span class="countdown-desc">Sekund</span>
-                            </div>
+                            <!--<div class="countdown-cell flex-vertical">-->
+                                <!--<span class="countSeconds">-->
+                                    <!--<span class="position">-->
+                                        <!--<span class="digit static"></span>-->
+                                    <!--</span>-->
+                                    <!--<span class="position">-->
+                                        <!--<span class="digit static"></span>-->
+                                    <!--</span>-->
+                                <!--</span>-->
+                                <!--<span class="countdown-desc">Sekund</span>-->
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
@@ -127,12 +127,24 @@
         </section>
     {% endblock %}
 
-    {% include 'rsvp/rsvp.html' %}
+    <section class="bg-primary rsvp">
+        {% include 'rsvp/rsvp.html' %}
+    </section>
+
+    <!-- jQuery -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap-switch -->
+    <script src="{% static 'vendor/bootstrap-switch/js/bootstrap-switch.js' %}"></script>
+    <script>
+        $.fn.bootstrapSwitch.defaults.size = 'mini';
+        $.fn.bootstrapSwitch.defaults.onText = 'TAK';
+        $.fn.bootstrapSwitch.defaults.offText = 'NIE';
+        $("[name='transport']").bootstrapSwitch();
+        $("[name='accomodation']").bootstrapSwitch();
+    </script>
 
     {% if wedding_time_json %}
-        <!-- jQuery -->
-        <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-
         <!-- Countdown scripts -->
         <script src="{% static 'vendor/countdown/js/jquery.countdown.js' %}"></script>
         <script src="{% static 'vendor/countdown/js/countdown.js' %}"></script>
