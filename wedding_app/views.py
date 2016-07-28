@@ -4,8 +4,9 @@ from json import dumps as json_dumps
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 
-from rsvp.forms import RSVPform
 from .models import Wedding, Party, Couple
+from rsvp.forms import RSVPform
+from rsvp.rsvp import get_rsvp_form
 
 def date_handler(obj):
     if hasattr(obj, 'isoformat'):
@@ -26,7 +27,7 @@ def home(request):
         wedding_day = wedding.when.strftime('%A')
         wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
 
-    #Get information about wedding
+    #Get information about party
     party = Party.objects.all()
     if len(party) == 0:
         party = None
@@ -41,18 +42,8 @@ def home(request):
         couple = couple[0]
 
     #Get RSVP informations
-    rsvp_fields = request.session.get('rsvp_fields')
-    rsvp_errors = request.session.get('rsvp_errors')
+    rsvp_form = get_rsvp_form(request.session)
     rsvp_success = request.session.get('rsvp_success', False)
-
-    #Add errors to RSVP form
-    rsvp_form = RSVPform(rsvp_fields)
-    if rsvp_errors:
-        fields = rsvp_errors.keys()
-        for field in fields:
-            errors = rsvp_errors.get(field)
-            for error in errors:
-                rsvp_form.add_error(field, error)
 
     context = {
         'wedding': wedding,
