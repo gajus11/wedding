@@ -1,4 +1,6 @@
 import datetime
+import locale
+from django.utils import timezone
 from json import dumps as json_dumps
 
 from django.shortcuts import render, redirect
@@ -15,16 +17,18 @@ def date_handler(obj):
         raise TypeError
 
 def home(request):
+    locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
+
     #Get information about wedding
     wedding = Wedding.objects.all()
     wedding_day = ''
-    wedding_time_json = json_dumps({'wedding_time': datetime.datetime.now()}, default=date_handler)
+    wedding_time_json = json_dumps({'wedding_time': timezone.now()}, default=date_handler)
 
     if len(wedding) == 0:
         wedding = None
     else:
         wedding = wedding[0]
-        wedding_day = wedding.when.strftime('%A')
+        wedding_day = wedding.when.strftime('%A').title()
         wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
 
     #Get information about party
@@ -60,6 +64,8 @@ def home(request):
                   context)
 
 def party(request):
+    locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
+
     #Get information about wedding
     wedding = Wedding.objects.all()
     wedding_day = ''
@@ -68,7 +74,7 @@ def party(request):
         wedding = None
     else:
         wedding = wedding[0]
-        wedding_day = wedding.when.strftime('%A')
+        wedding_day = wedding.when.strftime('%A').title()
 
     #Get information about party
     party = Party.objects.all()
