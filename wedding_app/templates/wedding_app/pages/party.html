@@ -39,9 +39,23 @@
     {% endblock %}
 
     {% block party-map %}
-
+        <section class="map">
+            <div class="row">
+                <div id="map"></div>
+                <input class="address-input" id="wedding-address" type="textbox" value="{{ wedding.address }}">
+                <input class="address-input" id="party-address" type="textbox" value="{{ party.address }}">
+            </div>
+        </section>
     {% endblock %}
 
     <!-- jQuery -->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+    <!-- Google Maps -->
+    <script src="{% static 'js/googlemaps.js' %}"></script>
+    <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDt95rribGhifJ5kYj2si5j-keKLcPOrx4&callback=initMap"> </script>-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDt95rribGhifJ5kYj2si5j-keKLcPOrx4"> </script>
+    <script>
+        $(document).ready(initMap('{% static "img/google_maps/" %}'));
+    </script>
 {% endblock %}

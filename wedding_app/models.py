@@ -23,11 +23,11 @@ class Wedding(models.Model):
     where = models.CharField(max_length=200)
     image = models.ImageField()
     description = models.CharField(max_length=1000)
-    #TODO:: Add google maps position
+    address = models.CharField(max_length=200)
 
 class Party(models.Model):
     when = models.DateTimeField()
     where = models.CharField(max_length=200)
     image = models.ImageField()
     description = models.CharField(max_length=1000)
-    #TODO:: Add google maps position
+    address = models.CharField(max_length=200)
