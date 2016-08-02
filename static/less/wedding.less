@@ -276,7 +276,7 @@
     }
 
     /* Form error color */
-    .form-error .form-control {
+    .form-error {
         background-color: @color-error;
     }
 }
@@ -311,8 +311,16 @@
 
 /* Section footer */
 .footer {
+    color: @color-tertiary;
+
     a {
-        color: @color-tertiary;
+        .transition-all;
+        color: @color-secondary;
+        &:hover,
+        &:focus {
+            color: lighten(@color-tertiary, 33%);
+            text-decoration: none;
+        }
     }
 }
 /* Flex list */

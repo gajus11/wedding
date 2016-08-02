@@ -18,5 +18,3 @@ class RSVPform(forms.ModelForm):
             'transport': forms.CheckboxInput(),
             'accomodation': forms.CheckboxInput(),
         }
-        # fields = ['name', 'last_name', 'adults_number',
-        #           'children_number', 'transport', 'accomodation']
