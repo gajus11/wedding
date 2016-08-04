@@ -30,6 +30,6 @@ def create_rsvp(request):
             errors = rsvp_form.errors.as_json()
 
             return JsonResponse(
-                {'errors': errors},
+                data={'errors': errors},
                 status=400
             )

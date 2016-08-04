@@ -33,10 +33,26 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row flex">
-        <div class="flex-center">
+<div class="bg-secondary login flex-center text-center full-height" id="login">
+    <div class="panel panel-secondary dialog-panel">
+        <div class="panel-heading">
+            <h3>Witaj! Wpisz otrzymane hasło.</h3>
+        </div>
+        <div class="panel-body">
+            <form id="login-form" class="form-horizontal" role="form" action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="form-group internal {% if form.password.errors %} form-error {% endif %}">
+                        {{ form.password }}
+                    </div>
+                </div>
 
+                <div class="col-xs-12">
+                    <input class="button" type="submit" value="Potwierdź">
+                </div>
+            </form>
         </div>
     </div>
+</div>
 {% endblock %}
 

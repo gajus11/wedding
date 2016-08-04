@@ -250,11 +250,22 @@
 }
 
 /* Section RSVP */
-.rsvp {
+.rsvp,
+.login {
 
     /* Panel colors */
     .panel-primary {
         border-color: @color-primary;
+
+        .panel-heading {
+            border-color: @color-primary;
+            background-color: @color-primary;
+        }
+    }
+
+    /* Panel colors */
+    .panel-secondary {
+        border-color: @color-secondary;
 
         .panel-heading {
             border-color: @color-primary;
@@ -279,6 +290,10 @@
     .form-error {
         background-color: @color-error;
     }
+}
+
+.full-height {
+    height: 100vh;
 }
 
 /* Section party_details */
@@ -365,6 +380,12 @@
     .flex-display(flex);
     .flex-direction(column);
     align-items: stretch;
+}
+
+.flex-center {
+    .flex-display(flex);
+    align-items: center;
+    justify-content: center;
 }
 
 .flex-centered {

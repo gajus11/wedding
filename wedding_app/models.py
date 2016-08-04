@@ -31,3 +31,6 @@ class Party(models.Model):
     image = models.ImageField()
     description = models.CharField(max_length=1000)
     address = models.CharField(max_length=200)
+
+class Configuration(models.Model):
+    login_required = models.BooleanField(default=True)

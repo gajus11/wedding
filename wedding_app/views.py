@@ -1,12 +1,17 @@
 import datetime
 import locale
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from django.utils import timezone
 from json import dumps as json_dumps
 
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 
-from .models import Wedding, Party, Couple
+from .models import Wedding, Party, Couple, Configuration
 from rsvp.forms import RSVPform
 from rsvp.rsvp import get_rsvp_form
 
@@ -16,6 +21,7 @@ def date_handler(obj):
     else:
         raise TypeError
 
+@login_required
 def home(request):
     locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
 
@@ -63,6 +69,7 @@ def home(request):
                   'wedding_app/pages/home.html',
                   context)
 
+@login_required
 def party(request):
     locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
 
@@ -100,4 +107,42 @@ def party(request):
     return render(request,
                   'wedding_app/pages/party.html',
                   context)
+
+def user_login(request):
+    username = 'user'
+
+    if request.method == 'POST':
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('wedding:home'))
+    else:
+        config = Configuration.objects.all()[0]
+
+        if config.login_required:
+            form = AuthenticationForm()
+
+            #Get information about couple
+            couple = Couple.objects.all()
+            if len(couple) == 0:
+                couple = None
+            else:
+                couple = couple[0]
+            context = {
+                'form': form,
+                'couple': couple,
+            }
+            return render(request,
+                   'wedding_app/pages/login.html',
+                   context)
+        else:
+            user = User.objects.get(username=username)
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            if user is not None:
+                login(request, user)
+                return redirect(reverse('wedding:home'))
 
