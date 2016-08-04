@@ -26,30 +26,15 @@ def home(request):
     locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
 
     #Get information about wedding
-    wedding = Wedding.objects.all()
-    wedding_day = ''
-    wedding_time_json = json_dumps({'wedding_time': timezone.now()}, default=date_handler)
-
-    if len(wedding) == 0:
-        wedding = None
-    else:
-        wedding = wedding[0]
-        wedding_day = wedding.when.strftime('%A').title()
-        wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
+    wedding = Wedding.load()
+    wedding_day = wedding.when.strftime('%A').title()
+    wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
 
     #Get information about party
-    party = Party.objects.all()
-    if len(party) == 0:
-        party = None
-    else:
-        party = party[0]
+    party = Party.load()
 
     #Get information about couple
-    couple = Couple.objects.all()
-    if len(couple) == 0:
-        couple = None
-    else:
-        couple = couple[0]
+    couple = Couple.load()
 
     #Get RSVP informations
     rsvp_form = get_rsvp_form(request.session)
@@ -74,28 +59,15 @@ def party(request):
     locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
 
     #Get information about wedding
-    wedding = Wedding.objects.all()
-    wedding_day = ''
-
-    if len(wedding) == 0:
-        wedding = None
-    else:
-        wedding = wedding[0]
-        wedding_day = wedding.when.strftime('%A').title()
+    wedding = Wedding.load()
+    wedding_day = wedding.when.strftime('%A').title()
+    wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
 
     #Get information about party
-    party = Party.objects.all()
-    if len(party) == 0:
-        party = None
-    else:
-        party = party[0]
+    party = Party.load()
 
     #Get information about couple
-    couple = Couple.objects.all()
-    if len(couple) == 0:
-        couple = None
-    else:
-        couple = couple[0]
+    couple = Couple.load()
 
     context = {
         'wedding': wedding,
@@ -127,11 +99,8 @@ def user_login(request):
             form = AuthenticationForm()
 
             #Get information about couple
-            couple = Couple.objects.all()
-            if len(couple) == 0:
-                couple = None
-            else:
-                couple = couple[0]
+            couple = Couple.load()
+
             context = {
                 'form': form,
                 'couple': couple,

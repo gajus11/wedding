@@ -20,3 +20,10 @@ class RSVP(models.Model):
                                     default=False)
     accomodation = models.BooleanField(verbose_name="nocleg",
                                        default=False)
+
+    class Meta:
+        verbose_name = 'potwierdzenie'
+        verbose_name_plural = 'potwierdzenia'
+
+    def __str__(self):
+        return self.name + ' ' + self.last_name

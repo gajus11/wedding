@@ -20,3 +20,10 @@ class Gift(models.Model):
                                 max_length=200,
                                 blank=True,
                                 null=True)
+
+    class Meta:
+        verbose_name = 'prezent'
+        verbose_name_plural = 'prezenty'
+
+    def __str__(self):
+        return self.name
