@@ -292,6 +292,44 @@
     }
 }
 
+/* Section gift-list */
+.gift-list {
+    .reserved {
+        background-color: @color-primary-light;
+        color: @color-secondary;
+
+        .button {
+            color: @color-secondary;
+            border-color: @color-primary;
+            background-color: @color-primary;
+        }
+
+        a {
+            color: @color-secondary;
+        }
+    }
+
+    .table > tbody > tr > td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    tr > th {
+        text-align: center;
+    }
+
+    .gift-img {
+        max-height: 75px;
+    }
+
+    /* Button style */
+    .button {
+        color: @color-primary;
+        border-color: @color-primary;
+        background-color: @color-secondary;
+    }
+}
+
 .full-height {
     height: 100vh;
 }
@@ -386,6 +424,7 @@
     .flex-display(flex);
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .flex-centered {

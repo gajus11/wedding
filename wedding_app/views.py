@@ -61,7 +61,6 @@ def party(request):
     #Get information about wedding
     wedding = Wedding.load()
     wedding_day = wedding.when.strftime('%A').title()
-    wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
 
     #Get information about party
     party = Party.load()

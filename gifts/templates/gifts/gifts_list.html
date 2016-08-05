@@ -1,35 +1,44 @@
+{% extends 'wedding_app/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
 {% block gift_list %}
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Link</th>
-                <th>Rezerwujący</th>
-                <th>Stan rezerwacji</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for gift_form  in gifts_forms %}
-                {% with gift=gift_form.0 form=gift_form.1 %}
-                <tr {% if gift.is_reserved %} class="reserved" {% endif %}>
-                    <td><img src="{{ gift.image.url }}" height="90" width="160"></td>
-                    <td><a href="{{ gift.link }}">{{ gift.name }}</a></td>
-                    {% if gift.is_reserved %}
-                        <td>{{ gift.reserver }}</td>
-                        <td><button>Zarezerwowane</button></td>
-                    {% else %}
-                    <form action="{{ gift.id }}/" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.name }}
-                        {{ form.link }}
-                        {{ form.is_reserved }}
-                        <td>{{ form.reserver }}</td>
-                        <td><input type="submit" value="Zarezerwuj" /></td>
-                    </form>
-                    {% endif %}
+<section class="gift-list container">
+        <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Link</th>
+                    <th>Rezerwujący</th>
+                    <th>Stan rezerwacji</th>
                 </tr>
-                {% endwith %}
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for gift_form  in gifts_forms %}
+                    {% with gift=gift_form.0 form=gift_form.1 %}
+                    <tr {% if gift.is_reserved %} class="reserved" {% endif %}>
+                        <td><img src="{{ gift.image.url }}" class="img-responsive gift-img"></td>
+                        <td class="gift-link"><a href="{{ gift.link }}">{{ gift.name }}</a></td>
+                        {% if gift.is_reserved %}
+                            <td>{{ gift.reserver }}</td>
+                            <td><button class="button">Zarezerwowane</button></td>
+                        {% else %}
+                        <form action="{{ gift.id }}/" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.name }}
+                            {{ form.link }}
+                            {{ form.is_reserved }}
+                            <td>{{ form.reserver }}</td>
+                            <td><input type="submit" value="Zarezerwuj" class="button"/></td>
+                        </form>
+                        {% endif %}
+                    </tr>
+                    {% endwith %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
 {% endblock %}
