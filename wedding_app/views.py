@@ -1,5 +1,6 @@
 import datetime
 import locale
+import pytz
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -27,11 +28,14 @@ def home(request):
 
     #Get information about wedding
     wedding = Wedding.load()
+    wedding.when = timezone.localtime(wedding.when)
     wedding_day = wedding.when.strftime('%A').title()
     wedding_time_json = json_dumps({'wedding_time': wedding.when}, default=date_handler)
+    print(wedding.when)
 
     #Get information about party
     party = Party.load()
+    party.when = timezone.localtime(party.when)
 
     #Get information about couple
     couple = Couple.load()
@@ -60,10 +64,12 @@ def party(request):
 
     #Get information about wedding
     wedding = Wedding.load()
+    wedding.when = timezone.localtime(wedding.when)
     wedding_day = wedding.when.strftime('%A').title()
 
     #Get information about party
     party = Party.load()
+    party.when = timezone.localtime(party.when)
 
     #Get information about couple
     couple = Couple.load()
