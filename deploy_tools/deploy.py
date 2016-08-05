@@ -4,37 +4,64 @@ from optparse import OptionParser
 
 REPO_URL = 'https://lgajownik@bitbucket.org/lgajownik/wedding.git'
 USER_NAME = 'lukasz-gajownik'
+DOMAIN_NAME = 'gajownik.com'
 PROJECT_NAME = 'wedding'
 SITE_NAME = 'slub'
 PYTHON_VERSION='3.5'
 
-def deploy(user=USER_NAME,repo=REPO_URL, project=PROJECT_NAME, site_name=SITE_NAME, python_version=PYTHON_VERSION):
-    file_abspath = os.path.abspath(__file__)
-    domain_folder = os.path.dirname(file_abspath)
-    site_folder = '%s/public_python' % (domain_folder)
-    domain_name = os.path.basename(domain_folder)
-    virtualenv_folder = '/home/%s/.virtualenvs/%s' % (user, domain_name)
+def deploy(user=USER_NAME,repo=REPO_URL, project=PROJECT_NAME, domain_name=DOMAIN_NAME, site_name=SITE_NAME, db_password='', python_version=PYTHON_VERSION):
+    domain_folder = '/usr/home/%s/domains' % (user)
+    subdomain_name = '%s.%s' % (site_name, domain_name)
+    site_folder = '%s/%s/public_python' % (domain_folder, subdomain_name)
+    virtualenv_folder = '/usr/home/%s/.virtualenvs/%s' % (user, subdomain_name)
 
-    print('file_abspath: ' + file_abspath)
     print('domain_folder: ' + domain_folder)
     print('site_folder: ' + site_folder)
-    print('domain_name: ' + domain_name)
+    print('subdomain_name: ' + subdomain_name)
     print('virtualenv_folder: ' + virtualenv_folder)
     print('repo: ' + repo)
     print('user: ' + user)
 
+    _create_mydevil_dns(domain_name, subdomain_name)
     _create_site_folder_if_neccessary(site_folder)
+    _create_virtualenv_if_neccessary(virtualenv_folder, user, subdomain_name, python_version)
+    _create_mydevil_site(subdomain_name, virtualenv_folder, python_version)
+    _create_postgresql_db(site_name)
     _get_latest_source(site_folder, repo)
     _create_directory_structure_if_necessary(site_folder)
     _update_virtualenv(site_folder, virtualenv_folder, domain_name, user, python_version)
-    _update_settings(site_folder, project, domain_name)
+    _update_settings(site_folder, project, subdomain_name, site_name, db_password)
     _update_static_files(site_folder, virtualenv_folder, python_version)
     _update_database(site_folder, virtualenv_folder, python_version)
+
+def _create_mydevil_dns(domain_name, subdomain_name):
+    print('_create_mydevil_dns')
+    deafult_ovh_address = '85.194.241.231'
+    _execude_command('devil dns add %s %s A %s' % (
+        domain_name, subdomain_name, deafult_ovh_address
+    ))
 
 def _create_site_folder_if_neccessary(site_folder):
     print('_create_site_folder_if_neccessary')
     if not os.path.exists(site_folder):
         _execude_command('mkdir -p %s' % (site_folder))
+
+def _create_virtualenv_if_neccessary(virtualenv_folder, user, subdomain_name, python_version):
+    print('_create_virtualenv_if_neccessary')
+    if not os.path.exists(virtualenv_folder):
+        _execude_command('cd /home/%s/.virtualenvs && virtualenv %s -p /usr/local/bin/python%s' % (
+            user, subdomain_name,python_version
+        ))
+
+def _create_mydevil_site(subdomain_name, virtualenv_folder, python_version):
+    print('_create_mydevil_site')
+    _execude_command('devil www add %s python %s/bin/python%s' % (
+        subdomain_name, virtualenv_folder, python_version
+    ))
+
+def _create_postgresql_db(site_name):
+    print('_create_postgresql_db')
+    _execude_command('devil pgsql db add %s' % (site_name))
 
 def _get_latest_source(site_folder, repo):
     print('_get_latest_source')
@@ -55,26 +82,55 @@ def _create_directory_structure_if_necessary(site_folder):
 
 def _update_virtualenv(site_folder, virtualenv_folder, domain_name, user, python_version):
     print('_update_virtualenv')
-    if not os.path.exists(virtualenv_folder):
-        _execude_command('cd /home/%s/.virtualenvs && virtualenv %s -p /usr/local/bin/python%s' % (user, domain_name,python_version))
     _execude_command('%s/bin/pip%s install -r %s/requirements.txt' % (
         virtualenv_folder, python_version, site_folder
     ))
 
-def _update_settings(site_folder, project, domain_name):
+def _update_settings(site_folder, project, subdomain_name, site_name, db_password):
     print('_update_settings')
     settings_path = site_folder + '/%s/settings.py' % (project)
     _inplace_change(settings_path, "DEBUG = True", "DEBUG = False")
-    _inplace_change(settings_path,
-        'ALLOWED_HOSTS = .+$',
-        'ALLOWED_HOSTS = ["%s"]' % (domain_name,)
-    )
+    # working with SECRET_KEY from dedicated file
+    _inplace_change(settings_path, "#SECRET_KEY = ", "SECRET_KEY = ")   # For not creating something like ########SECRET_KEY
+    _inplace_change(settings_path, "SECRET_KEY = ", "#SECRET_KEY = ")
+    # add secret key file
     secret_key_file = site_folder + '/%s/secret_key.py' % (project)
     if not os.path.exists(secret_key_file):
         chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
         key = "".join(random.SystemRandom().choice(chars) for _ in range(50))
         _append_to_file(secret_key_file, "SECRET_KEY = '%s'" % (key,))
     _append_to_file(settings_path, '\nfrom .secret_key import SECRET_KEY')
+
+    _inplace_change(settings_path,
+        'ALLOWED_HOSTS = .+$',
+        'ALLOWED_HOSTS = ["%s"]' % (subdomain_name,)
+    )
+
+    # change database engine
+    database_setting_file = site_folder + '/%s/database_setting.py' % (project)
+    if not os.path.exists(database_setting_file):
+        new_database_setting = "" \
+            "DATABASES = { " \
+                "\t'default': { \n" \
+                    "\t\t'ENGINE': 'django.db.backends.postgresql_psycopg2'," \
+                    "\t\t'NAME': 'p1350_%s'," \
+                    "\t\t'USER': 'p1350_%s', " \
+                    "\t\t'PASSWORD': '%s', " \
+                    "\t\t'HOST': 'localhost', "\
+                    "\t\t'PORT': ''," \
+                "\t}" \
+            "}" % (site_name, site_name, db_password)
+        _append_to_file(database_setting_file, new_database_setting)
+    _append_to_file(settings_path, '\nfrom .database_setting import DATABASES')
+
+    old_database_setting = "" \
+        "DATABASES = {" \
+            "\t'default': {" \
+                "\t\t'ENGINE': 'django.db.backends.sqlite3'," \
+                "\t\t'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),"\
+            "\t}" \
+        "}"
+    _inplace_change(settings_path, old_database_setting, '')
 
 def _update_static_files(site_folder, virtualenv_folder, python_version):
     print('_update_static_files')
@@ -109,21 +165,32 @@ if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("--user",
                   action="store", dest="user", type='string', default=USER_NAME,
-                  help="Username on server")
+                  help="Username on server (default: lukasz-gajownik")
     parser.add_option("--repo",
                   action="store", dest="repo", type='string', default=REPO_URL,
-                  help="Repository url (http://repo/file/path.git")
+                  help="Repository url (default: https://lgajownik@bitbucket.org/lgajownik/wedding.git")
     parser.add_option("--project",
                   action="store", dest="project", type='string', default=PROJECT_NAME,
-                  help="Django project name")
+                  help="Django project name (default: wedding")
+    parser.add_option("--domain-name",
+                  action="store", dest="domain_name", type='string', default=DOMAIN_NAME,
+                  help="Domain name (default: gajownik.com")
     parser.add_option("--site-name",
                       action="store", dest="site_name", type='string', default=SITE_NAME,
-                      help="Site name in domain")
+                      help="Site name in domain (default: slub")
     parser.add_option("--python_version",
                       action="store", dest="python_version", type='string', default='3.5',
                       help="Python version (default 3.5)")
-
+    parser.add_option("--db_password",
+                      action="store", dest="db_password", type='string', default='',
+                      help="Password for PostgreSQL")
 
     options, args = parser.parse_args()
 
-    deploy(user=options.user, repo=options.repo, project=options.project, site_name=options.site_name, python_version=options.python_version)
+    deploy(user=options.user,
+           repo=options.repo,
+           project=options.project,
+           domain_name=options.domain_name,
+           site_name=options.site_name,
+           db_password=options.db_password,
+           python_version=options.python_version)
