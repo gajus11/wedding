@@ -2,7 +2,8 @@
 <html lang="pl">
 
 {% load staticfiles %}
-{% load compress %}
+{% load compile_static %}
+{% load static %}
 
 {% block head %}
 <head>
@@ -18,10 +19,9 @@
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Theme LESS -->
-    {% compress css %}
-        <link rel="stylesheet" type="text/less" href="{% static 'less/creative.less' %}">
-        <link rel="stylesheet" type="text/less" href="{% static 'less/wedding.less' %}">
-    {% endcompress %}
+
+        <link rel="stylesheet" type="text/less" href="{% static 'less/creative.less'|compile %}">
+        <link rel="stylesheet" type="text/less" href="{% static 'less/wedding.less'|compile %}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

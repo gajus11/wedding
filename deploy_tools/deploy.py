@@ -96,9 +96,11 @@ def _update_settings(site_folder, project, subdomain_name, site_name, db_passwor
     print('_update_settings')
     settings_path = site_folder + '/%s/settings.py' % (project)
     _inplace_change(settings_path, "DEBUG = True", "DEBUG = False")
+
     # working with SECRET_KEY from dedicated file
     _inplace_change(settings_path, "#SECRET_KEY = ", "SECRET_KEY = ")   # For not creating something like ########SECRET_KEY
     _inplace_change(settings_path, "SECRET_KEY = ", "#SECRET_KEY = ")
+
     # add secret key file
     secret_key_file = site_folder + '/%s/secret_key.py' % (project)
     if not os.path.exists(secret_key_file):
@@ -107,8 +109,9 @@ def _update_settings(site_folder, project, subdomain_name, site_name, db_passwor
         _append_to_file(secret_key_file, "SECRET_KEY = '%s'" % (key,))
     _append_to_file(settings_path, '\nfrom .secret_key import SECRET_KEY')
 
+    # set ALLOWED_HOSTS
     _inplace_change(settings_path,
-        'ALLOWED_HOSTS = .+$',
+        'ALLOWED_HOSTS = []',
         'ALLOWED_HOSTS = ["%s"]' % (subdomain_name,)
     )
 
@@ -130,6 +133,23 @@ def _update_settings(site_folder, project, subdomain_name, site_name, db_passwor
     _append_to_file(settings_path, '\nfrom .database_setting import DATABASES')
 
     _inplace_change(settings_path, 'DATABASES = {', 'DEPRECATED_SETTINGS = {')
+
+    # change static files
+    static_setting_file = site_folder + '/%s/database_setting.py' % (project)
+    if not os.path.exists(database_setting_file):
+        new_static_setting = "" \
+            "STATIC_URL = '/static/'\n" \
+            "MEDIA_URL = '/media/'\n" \
+            "ENV_PATH = os.path.abspath(os.path.dirname(__file__))\n" \
+            "STATIC_ROOT = os.path.join(ENV_PATH, '../public/static/')\n" \
+            "MEDIA_ROOT = os.path.join(ENV_PATH, '../public/media/')\n""
+        _append_to_file(static_setting_file, new_static_setting)
+    _append_to_file(settings_path, '\nfrom .database_setting import DATABASES')
+
+    _inplace_change(settings_path, "STATIC_URL = ", "#STATIC_URL_ = ")
+    _inplace_change(settings_path, "MEDIA_URL = ", "#MEDIA_URL_ = ")
+    _inplace_change(settings_path, "STATIC_ROOT = ", "#STATIC_ROOT_ = ")
+    _inplace_change(settings_path, "MEDIA_ROOT = ", "#MEDIA_ROOT_ = ")
 
 def _update_static_files(site_folder, virtualenv_folder, python_version):
     print('_update_static_files')

@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'compressor',
+    'static_precompiler',
 ]
 
 PROJECT_APPS = [
@@ -131,23 +131,18 @@ MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = (os.path.join('static'),)
 
-
-# Django Compressor + LESS
-COMPRESS_ENABLED = True
-# if not os.environ.has_key('COMPRESS_OFFLINE'):
-#     COMPRESS_OFFLINE = True
-COMPRESS_PRECOMPILERS = (
-    ('text/less', 'lessc {infile} {outfile}'),
-)
-
 STATIC_ROOT = 'assets'
+
+ENV_PATH = os.path.abspath(os.path.dirname(__file__))
+STATIC_ROOT = os.path.join(ENV_PATH, '../public/static/')
+MEDIA_ROOT = os.path.join(ENV_PATH, '../public/media/')
+
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # other finders..
-    'compressor.finders.CompressorFinder',
+    'static_precompiler.finders.StaticPrecompilerFinder',
 )
