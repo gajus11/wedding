@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^gifts/', include('gifts.urls', namespace='gifts')),
     url(r'^rsvp/', include('rsvp.urls', namespace='rsvp')),
-    url(r'^', include('wedding_app.urls', namespace='wedding')),
+    url(r'^$', include('wedding_app.urls', namespace='wedding')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
