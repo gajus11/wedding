@@ -98,7 +98,7 @@ def user_login(request):
                 login(request, user)
                 return redirect(reverse('wedding:home'))
     else:
-        config = Configuration.objects.all()[0]
+        config = Configuration.load()
 
         if config.login_required:
             form = AuthenticationForm()

@@ -1,5 +1,6 @@
 import os
 import random
+import subprocess
 from optparse import OptionParser
 
 REPO_URL = 'https://lgajownik@bitbucket.org/lgajownik/wedding.git'
@@ -26,13 +27,14 @@ def deploy(user=USER_NAME,repo=REPO_URL, project=PROJECT_NAME, domain_name=DOMAI
     _create_site_folder_if_neccessary(site_folder)
     _create_virtualenv_if_neccessary(virtualenv_folder, user, subdomain_name, python_version)
     _create_mydevil_site(subdomain_name, virtualenv_folder, python_version)
-    _create_postgresql_db(site_name)
+    _create_postgresql_db_if_neccessary(site_name)
     _get_latest_source(site_folder, repo)
     _create_directory_structure_if_necessary(site_folder)
     _update_virtualenv(site_folder, virtualenv_folder, domain_name, user, python_version)
     _update_settings(site_folder, project, subdomain_name, site_name, db_password)
     _update_static_files(site_folder, virtualenv_folder, python_version)
     _update_database(site_folder, virtualenv_folder, python_version)
+    _create_passenger_wsgi_if_neccessary(site_folder, project)
 
 def _create_mydevil_dns(domain_name, subdomain_name):
     print('_create_mydevil_dns')
@@ -59,9 +61,12 @@ def _create_mydevil_site(subdomain_name, virtualenv_folder, python_version):
         subdomain_name, virtualenv_folder, python_version
     ))
 
-def _create_postgresql_db(site_name):
-    print('_create_postgresql_db')
-    _execude_command('devil pgsql db add %s' % (site_name))
+def _create_postgresql_db_if_neccessary(site_name):
+    print('_create_postgresql_db_if_neccessary')
+    command = 'devil pgsql list'
+    result = subprocess.check_output(command, shell=True)
+    if not site_name in result:
+        _execude_command('devil pgsql db add %s' % (site_name))
 
 def _get_latest_source(site_folder, repo):
     print('_get_latest_source')
@@ -82,6 +87,7 @@ def _create_directory_structure_if_necessary(site_folder):
 
 def _update_virtualenv(site_folder, virtualenv_folder, domain_name, user, python_version):
     print('_update_virtualenv')
+    _execude_command('source %s/bin/activate' % (virtualenv_folder))
     _execude_command('%s/bin/pip%s install -r %s/requirements.txt' % (
         virtualenv_folder, python_version, site_folder
     ))
@@ -110,27 +116,20 @@ def _update_settings(site_folder, project, subdomain_name, site_name, db_passwor
     database_setting_file = site_folder + '/%s/database_setting.py' % (project)
     if not os.path.exists(database_setting_file):
         new_database_setting = "" \
-            "DATABASES = { " \
+            "DATABASES = { \n" \
                 "\t'default': { \n" \
-                    "\t\t'ENGINE': 'django.db.backends.postgresql_psycopg2'," \
-                    "\t\t'NAME': 'p1350_%s'," \
-                    "\t\t'USER': 'p1350_%s', " \
-                    "\t\t'PASSWORD': '%s', " \
-                    "\t\t'HOST': 'localhost', "\
-                    "\t\t'PORT': ''," \
-                "\t}" \
-            "}" % (site_name, site_name, db_password)
+                    "\t\t'ENGINE': 'django.db.backends.postgresql',\n" \
+                    "\t\t'NAME': 'p1350_%s',\n" \
+                    "\t\t'USER': 'p1350_%s', \n" \
+                    "\t\t'PASSWORD': '%s', \n" \
+                    "\t\t'HOST': 'pgsql8.mydevil.net', \n"\
+                    "\t\t'PORT': '5432',\n" \
+                "\t}\n" \
+            "\n}" % (site_name, site_name, db_password)
         _append_to_file(database_setting_file, new_database_setting)
     _append_to_file(settings_path, '\nfrom .database_setting import DATABASES')
 
-    old_database_setting = "" \
-        "DATABASES = {" \
-            "\t'default': {" \
-                "\t\t'ENGINE': 'django.db.backends.sqlite3'," \
-                "\t\t'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),"\
-            "\t}" \
-        "}"
-    _inplace_change(settings_path, old_database_setting, '')
+    _inplace_change(settings_path, 'DATABASES = {', 'DEPRECATED_SETTINGS = {')
 
 def _update_static_files(site_folder, virtualenv_folder, python_version):
     print('_update_static_files')
@@ -140,9 +139,24 @@ def _update_static_files(site_folder, virtualenv_folder, python_version):
 
 def _update_database(site_folder, virtualenv_folder, python_version):
     print('_update_database')
+    _execude_command('cd %s && %s/bin/python%s manage.py makemigrations' % (
+        site_folder, virtualenv_folder, python_version
+    ))
     _execude_command('cd %s && %s/bin/python%s manage.py migrate --noinput' % (
         site_folder, virtualenv_folder, python_version
     ))
+
+def _create_passenger_wsgi_if_neccessary(site_folder, project):
+    passanger_wsgi_file = '%s/passenger_wsgi.py' % (site_folder)
+    if not os.path.exists(passanger_wsgi_file):
+        passanger_wsgi_py = "" \
+            "import sys, os \n" \
+            "\n" \
+            "sys.path.append(os.getcwd()) \n" \
+            "os.environ['DJANGO_SETTINGS_MODULE'] = '%s.settings'\n" \
+            "from django.core.wsgi import get_wsgi_application\n" \
+            "application = get_wsgi_application()" % (project)
+        _append_to_file(passanger_wsgi_file, passanger_wsgi_py)
 
 def _execude_command(command):
     print('Execute: %s' % (command))
