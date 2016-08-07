@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'static_precompiler',
+    'compressor',
 ]
 
 PROJECT_APPS = [
@@ -144,5 +144,12 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # other finders..
-    'static_precompiler.finders.StaticPrecompilerFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_ENABLED=True
+# if not os.environ.has_key('COMPRESS_OFFLINE'):
+#     COMPRESS_OFFLINE=True #this is so that compress_offline is set to true during deployment to Heroku
+COMPRESS_PRECOMPILERS = (
+    ('text/less','lessc {infile} {outfile}'),
 )
