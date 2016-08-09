@@ -31,7 +31,7 @@ def deploy(user=USER_NAME,repo=REPO_URL, project=PROJECT_NAME, domain_name=DOMAI
     _get_latest_source(site_folder, repo)
     _create_directory_structure_if_necessary(site_folder)
     _update_virtualenv(site_folder, virtualenv_folder, domain_name, user, python_version)
-    _update_settings(site_folder, project, subdomain_name, site_name, db_password)
+    _update_settings(site_folder, project, subdomain_name, site_name, db_password, virtualenv_folder)
     _update_static_files(site_folder, virtualenv_folder, python_version)
     _update_database(site_folder, virtualenv_folder, python_version)
     _create_passenger_wsgi_if_neccessary(site_folder, project)
@@ -92,7 +92,7 @@ def _update_virtualenv(site_folder, virtualenv_folder, domain_name, user, python
         virtualenv_folder, python_version, site_folder
     ))
 
-def _update_settings(site_folder, project, subdomain_name, site_name, db_password):
+def _update_settings(site_folder, project, subdomain_name, site_name, db_password, virtualenv_folder):
     print('_update_settings')
     settings_path = site_folder + '/%s/settings.py' % (project)
     _inplace_change(settings_path, "DEBUG = True", "DEBUG = False")
@@ -151,6 +151,9 @@ def _update_settings(site_folder, project, subdomain_name, site_name, db_passwor
         _inplace_change(settings_path, "MEDIA_URL = ", "#MEDIA_URL_ = ")
         _inplace_change(settings_path, "STATIC_ROOT = ", "#STATIC_ROOT_ = ")
         _inplace_change(settings_path, "MEDIA_ROOT = ", "#MEDIA_ROOT_ = ")
+
+    # change compressor path
+    _inplace_change(settings_path, "('text/less','lessc {infile} {outfile}')", "('text/less','%s/../node_modules/lessc {infile} {outfile}')" % (virtualenv_folder))
 
 def _update_static_files(site_folder, virtualenv_folder, python_version):
     print('_update_static_files')
