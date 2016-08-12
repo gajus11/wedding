@@ -155,6 +155,10 @@ def _update_settings(site_folder, project, subdomain_name, site_name, db_passwor
     # change compressor path
     _inplace_change(settings_path, "('text/less','lessc {infile} {outfile}')", "('text/less','%s/../node_modules/lessc {infile} {outfile}')" % (virtualenv_folder))
 
+    # change stage
+    _inplace_change(settings_path, "STAGE = 'development'", "STAGE = 'production'")
+
+
 def _update_static_files(site_folder, virtualenv_folder, python_version):
     print('_update_static_files')
     _execude_command('cd %s && %s/bin/python%s manage.py collectstatic --noinput' % (

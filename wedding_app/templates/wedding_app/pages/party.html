@@ -25,13 +25,13 @@
                     <div class="col-lg-5 col-lg-offset-1 flex-vertical">
                         <img class="img-responsive center-block" src="{{ wedding.image.url }}">
                         <h3>Ceremonia zaślubin</h3>
-                        {{ wedding.description }}
+                        {{ wedding.description|linebreaks }}
                         <h4>{{ wedding_day }}, {{ wedding.when.day }}.{{ wedding.when.month }}.{{ wedding.when.year }}r., godz. {{ wedding.when.hour }}:{{ wedding.when.minute }}</h4>
                     </div>
                     <div class="col-lg-5 col-lg-offset-1 flex-vertical">
                         <img class="img-responsive center-block" src="{{ party.image.url }}">
                         <h3>Przyjęcie weselne</h3>
-                        {{ party.description }}
+                        {{ party.description|linebreaks }}
                         <h4>{{ wedding_day }}, {{ party.when.day }}.{{ party.when.month }}.{{ party.when.year }}r., godz. {{ party.when.hour }}:{{ party.when.minute }}</h4>
                     </div>
                 </div>

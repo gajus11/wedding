@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.conf import settings
 from json import dumps as json_dumps
 
 from django.shortcuts import render, redirect
@@ -24,7 +25,10 @@ def date_handler(obj):
 
 @login_required
 def home(request):
-    locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
+    if settings.STAGE == 'development':
+        locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
+    else:
+        locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
 
     #Get information about wedding
     wedding = Wedding.load()
@@ -60,7 +64,10 @@ def home(request):
 
 @login_required
 def party(request):
-    locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
+    if settings.STAGE == 'development':
+        locale.setlocale(locale.LC_ALL, 'pl_PL.utf8')
+    else:
+        locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
 
     #Get information about wedding
     wedding = Wedding.load()
@@ -114,7 +121,10 @@ def user_login(request):
                    'wedding_app/pages/login.html',
                    context)
         else:
-            user = User.objects.get(username=username)
+            if request.user.is_authenticated():
+                user = request.user
+            else:
+                user = User.objects.get(username=username)
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             if user is not None:
                 login(request, user)
