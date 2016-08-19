@@ -16,7 +16,7 @@ function submit_form(){
     }
 
     $.ajax({
-        url : 'rsvp/create_rsvp/',
+        url : '../rsvp/create_rsvp/',
         type : 'POST',
         data : {
             'name' : $('#id_name').val(),
